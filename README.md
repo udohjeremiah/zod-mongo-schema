@@ -1,15 +1,13 @@
-# zod-to-mongo-schema
+# zod-mongo-schema
 
 Convert Zod schemas to MongoDB-compatible JSON Schemas effortlessly.
 
-[![license](https://img.shields.io/github/license/udohjeremiah/zod-to-mongo-schema.svg)](https://github.com/udohjeremiah/zod-to-mongo-schema/blob/main/LICENSE)
-[![npm](https://img.shields.io/npm/v/zod-to-mongo-schema.svg)](https://www.npmjs.com/package/zod-to-mongo-schema)
-[![downloads](https://img.shields.io/npm/dm/zod-to-mongo-schema.svg)](https://www.npmjs.com/package/zod-to-mongo-schema)
-[![ci](https://github.com/udohjeremiah/zod-to-mongo-schema/actions/workflows/ci.yaml/badge.svg)](https://github.com/udohjeremiah/zod-to-mongo-schema/actions/workflows/ci.yaml)
-![code style](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)
-![lint](https://img.shields.io/badge/lint-eslint-blueviolet.svg)
-![tests](https://img.shields.io/badge/tests-vitest-yellow.svg)
-[![commitlint](https://img.shields.io/badge/commits-conventional-green.svg)](https://www.conventionalcommits.org)
+![NPM Version](https://img.shields.io/npm/v/%40udohjeremiah%2Fzod-mongo-schema)
+![NPM Downloads](https://img.shields.io/npm/dm/%40udohjeremiah%2Fzod-mongo-schema)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/udohjeremiah/zod-mongo-schema/ci.yaml)
+![Codecov](https://img.shields.io/codecov/c/github/udohjeremiah/zod-mongo-schema)
+![npm bundle size](https://img.shields.io/bundlephobia/minzip/%40udohjeremiah%2Fzod-mongo-schema)
+![GitHub License](https://img.shields.io/github/license/udohjeremiah/zod-mongo-schema)
 
 ## Overview
 
@@ -25,7 +23,7 @@ schemas.
 Wouldn't it be great if you could just take your existing Zod schema and
 instantly turn it into a MongoDB-compatible JSON Schema?
 
-That's exactly what `zod-to-mongo-schema` does. It takes your Zod schema and
+That's exactly what `zod-mongo-schema` does. It takes your Zod schema and
 converts it into a ready-to-use JSON Schema that can be applied directly to your
 MongoDB collections for validation.
 
@@ -35,13 +33,13 @@ MongoDB collections for validation.
 
 ```bash
 # npm
-npm install zod-to-mongo-schema
+npm install @udohjeremiah/zod-mongo-schema
 
 # yarn
-yarn add zod-to-mongo-schema
+yarn add @udohjeremiah/zod-mongo-schema
 
 # pnpm
-pnpm add zod-to-mongo-schema
+pnpm add @udohjeremiah/zod-mongo-schema
 ```
 
 ## Usage
@@ -50,7 +48,7 @@ pnpm add zod-to-mongo-schema
 
 ```js
 import z from "zod";
-import zodToMongoSchema from "zod-to-mongo-schema";
+import zodMongoSchema from "@udohjeremiah/zod-mongo-schema";
 
 const userSchema = z.object({
   name: z.string(),
@@ -58,7 +56,7 @@ const userSchema = z.object({
   isAdmin: z.boolean(),
 });
 
-const mongoSchema = zodToMongoSchema(userSchema);
+const mongoSchema = zodMongoSchema(userSchema);
 console.log(JSON.stringify(mongoSchema, null, 2));
 ```
 
@@ -96,7 +94,7 @@ const userSchema = z.object({
   }),
 });
 
-const mongoSchema = zodToMongoSchema(userSchema);
+const mongoSchema = zodMongoSchema(userSchema);
 console.log(JSON.stringify(mongoSchema, null, 2));
 ```
 
@@ -139,7 +137,7 @@ const userSchema = z.object({
   createdAt: z.date(), // auto-mapped to { bsonType: "date" }
 });
 
-const mongoSchema = zodToMongoSchema(userSchema);
+const mongoSchema = zodMongoSchema(userSchema);
 console.log(JSON.stringify(mongoSchema, null, 2));
 ```
 
@@ -170,7 +168,7 @@ Using `.meta({ bsonType })` on other Zod types will throw:
 const userSchema = z.object({
   _id: z.string().meta({ bsonType: "objectId" }),
 });
-const mongoSchema = zodToMongoSchema(userSchema);
+const mongoSchema = zodMongoSchema(userSchema);
 ```
 
 ```bash
@@ -193,7 +191,7 @@ const userSchema = z.object({
   _id: z.unknown().meta({ bsonType: "objectId" }).nullable(), // correct
   // _id: z.unknown().nullable().meta({ bsonType: "objectId" }), // incorrect
 });
-const mongoSchema = zodToMongoSchema(userSchema);
+const mongoSchema = zodMongoSchema(userSchema);
 console.log(JSON.stringify(mongoSchema, null, 2));
 ```
 
@@ -236,7 +234,7 @@ const userSchema = z.object({
 
 ### Non-strict mode
 
-By default, `zodToMongoSchema` operates in strict mode, which:
+By default, `zodMongoSchema` operates in strict mode, which:
 
 - Only allows `bsonType` on `z.unknown()` schemas (except `z.date()`, which is
   auto-mapped)
@@ -251,7 +249,7 @@ const userSchema = z.object({
   data: z.instanceof(Uint8Array).meta({ bsonType: "binData" }),
 });
 
-const mongoSchema = zodToMongoSchema(userSchema, { strict: false });
+const mongoSchema = zodMongoSchema(userSchema, { strict: false });
 console.log(JSON.stringify(mongoSchema, null, 2));
 ```
 
@@ -301,7 +299,7 @@ const userSchema = z.object({
   balance: z.unknown().meta({ bsonType: "decimal" }),
 });
 
-const mongoSchema = zodToMongoSchema(userSchema);
+const mongoSchema = zodMongoSchema(userSchema);
 console.log(JSON.stringify(mongoSchema, null, 2));
 ```
 
@@ -356,7 +354,7 @@ const userSchema = z.object({
   largeInt: z.int().min(-9_000_000_000_000_000).max(9_000_000_000_000_000),
 });
 
-const mongoSchema = zodToMongoSchema(userSchema);
+const mongoSchema = zodMongoSchema(userSchema);
 console.log(JSON.stringify(mongoSchema, null, 2));
 ```
 
@@ -406,7 +404,7 @@ const schema = z.object({
   customRange2: z.float64().min(0.5), // Falls back to "number"
 });
 
-const mongoSchema = zodToMongoSchema(schema);
+const mongoSchema = zodMongoSchema(schema);
 console.log(JSON.stringify(mongoSchema, null, 2));
 ```
 
@@ -475,7 +473,7 @@ const userSchema = z.object({
   age: z.string().meta({ whatever: "trash" }),
 });
 
-const mongoSchema = zodToMongoSchema(userSchema);
+const mongoSchema = zodMongoSchema(userSchema);
 console.log(JSON.stringify(mongoSchema, null, 2));
 ```
 
@@ -519,7 +517,7 @@ error if encountered in strict mode (the default):
 > [!WARNING]
 > `z.date()` is **not** in this list. Zod's `toJSONSchema` throws on `z.date()`
 > because dates aren't representable in standard JSON Schema, but since `date`
-> is a native BSON type the mapping is unambiguous — `zodToMongoSchema`
+> is a native BSON type the mapping is unambiguous — `zodMongoSchema`
 > automatically converts `z.date()` to `{ bsonType: "date" }` in both strict and
 > non-strict modes.
 
@@ -570,7 +568,7 @@ console.log(JSON.stringify(jsonSchema, null, 2));
 This is the intended design of the [`.meta()` API](https://zod.dev/metadata) —
 Zod allows arbitrary metadata.
 
-However, `zod-to-mongo-schema` expects you to use it **only for two purposes**:
+However, `zod-mongo-schema` expects you to use it **only for two purposes**:
 
 1. **To specify `title` and `description` fields:**
 
@@ -582,7 +580,7 @@ However, `zod-to-mongo-schema` expects you to use it **only for two purposes**:
      }),
    });
 
-   const mongoSchema = zodToMongoSchema(userSchema);
+   const mongoSchema = zodMongoSchema(userSchema);
    console.log(JSON.stringify(mongoSchema, null, 2));
    ```
 
@@ -610,7 +608,7 @@ However, `zod-to-mongo-schema` expects you to use it **only for two purposes**:
      _id: z.unknown().meta({ bsonType: "objectId" }),
    });
 
-   const mongoSchema = zodToMongoSchema(userSchema);
+   const mongoSchema = zodMongoSchema(userSchema);
    console.log(JSON.stringify(mongoSchema, null, 2));
    ```
 
@@ -635,7 +633,7 @@ const userSchema = z.object({
   name: z.string().meta({ maxLength: 50, default: "Anonymous" }),
 });
 
-const mongoSchema = zodToMongoSchema(userSchema);
+const mongoSchema = zodMongoSchema(userSchema);
 console.log(JSON.stringify(mongoSchema, null, 2));
 ```
 
@@ -662,7 +660,7 @@ will be thrown. In non-strict mode, `bsonType` silently takes precedence and
 const userSchema = z.object({
   _id: z.unknown().meta({ type: "boolean", bsonType: "objectId" }),
 });
-const mongoSchema = zodToMongoSchema(userSchema);
+const mongoSchema = zodMongoSchema(userSchema);
 ```
 
 ```bash
@@ -676,7 +674,7 @@ Outside those two cases, the library assumes you know better than it — so
 **you're fully responsible** for ensuring the produced JSON Schema is valid for
 MongoDB.
 
-`zod-to-mongo-schema` encourages you to rely on your Zod schemas as much as
+`zod-mongo-schema` encourages you to rely on your Zod schemas as much as
 possible, and only step outside them for the two supported `.meta()` uses listed
 above.
 

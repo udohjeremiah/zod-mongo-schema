@@ -2,21 +2,21 @@
 import { describe, expect, it } from "vitest";
 import z from "zod";
 
-import zodToMongoSchema from "./index.js";
+import zodMongoSchema from "./index.js";
 
-describe("zod-to-mongo-schema", () => {
+describe("zod-mongo-schema", () => {
   describe("strict mode (default)", () => {
     it("returns empty object on falsy/undefined input", () => {
       // @ts-expect-error testing runtime behavior
-      expect(zodToMongoSchema()).toEqual({});
+      expect(zodMongoSchema()).toEqual({});
       // @ts-expect-error testing runtime behavior
       // eslint-disable-next-line unicorn/no-useless-undefined
-      expect(zodToMongoSchema(undefined)).toEqual({});
+      expect(zodMongoSchema(undefined)).toEqual({});
     });
 
     it("handles empty object schema gracefully", () => {
       const schema = z.object({});
-      const r = zodToMongoSchema(schema);
+      const r = zodMongoSchema(schema);
       expect(r).toMatchObject({ type: "object", properties: {} });
     });
 
@@ -28,7 +28,7 @@ describe("zod-to-mongo-schema", () => {
         hobbies: z.array(z.string()),
       });
 
-      const r = zodToMongoSchema(schema);
+      const r = zodMongoSchema(schema);
 
       expect(r).toMatchObject({
         type: "object",
@@ -54,7 +54,7 @@ describe("zod-to-mongo-schema", () => {
           .max(9_007_199_254_740_991),
       });
 
-      const r = zodToMongoSchema(schema);
+      const r = zodMongoSchema(schema);
 
       expect(r.properties?.smallInt.bsonType).toBe("int");
       expect(r.properties?.smallIntDefaultRange.bsonType).toBe("int");
@@ -66,7 +66,7 @@ describe("zod-to-mongo-schema", () => {
       const schema = z.object({
         val: z.number().min(-2_147_483_648).max(2_147_483_647),
       });
-      const r = zodToMongoSchema(schema);
+      const r = zodMongoSchema(schema);
       expect(r.properties?.val.type).toBe("number");
     });
 
@@ -79,7 +79,7 @@ describe("zod-to-mongo-schema", () => {
         number: z.number().min(0.1).max(99.9),
       });
 
-      const r = zodToMongoSchema(schema);
+      const r = zodMongoSchema(schema);
 
       expect(r.properties?.smallInt.bsonType).toBe("int");
       expect(r.properties?.smallInt.minimum).toBe(-100);
@@ -117,7 +117,7 @@ describe("zod-to-mongo-schema", () => {
         floatPartialBound: z.float64().min(-10.5),
       });
 
-      const r = zodToMongoSchema(schema);
+      const r = zodMongoSchema(schema);
 
       expect(r.properties?.float32.bsonType).toBe("double");
       expect(r.properties?.float32DefaultRange.bsonType).toBe("double");
@@ -156,7 +156,7 @@ describe("zod-to-mongo-schema", () => {
           .meta({ title: "Full Name", description: "User's name" }),
       });
 
-      const r = zodToMongoSchema(schema);
+      const r = zodMongoSchema(schema);
       expect(r.properties?.name).toMatchObject({
         title: "Full Name",
         description: "User's name",
@@ -169,7 +169,7 @@ describe("zod-to-mongo-schema", () => {
         _id: z.unknown().meta({ bsonType: "objectId" }),
       });
 
-      const r = zodToMongoSchema(schema);
+      const r = zodMongoSchema(schema);
       expect(r.properties?._id).toMatchObject({ bsonType: "objectId" });
 
       const badSchemas = [
@@ -181,7 +181,7 @@ describe("zod-to-mongo-schema", () => {
       ];
 
       for (const badSchema of badSchemas) {
-        expect(() => zodToMongoSchema(badSchema)).toThrowError(
+        expect(() => zodMongoSchema(badSchema)).toThrowError(
           /`bsonType` can only be used with `z\.unknown\(\)`./,
         );
       }
@@ -196,7 +196,7 @@ describe("zod-to-mongo-schema", () => {
       ];
 
       for (const badSchema of badSchemas) {
-        expect(() => zodToMongoSchema(badSchema)).toThrowError(
+        expect(() => zodMongoSchema(badSchema)).toThrowError(
           /`bsonType` can only be used with `z\.unknown\(\)`./,
         );
       }
@@ -213,7 +213,7 @@ describe("zod-to-mongo-schema", () => {
       ];
 
       for (const badSchema of badSchemas) {
-        expect(() => zodToMongoSchema(badSchema)).toThrowError(
+        expect(() => zodMongoSchema(badSchema)).toThrowError(
           /Cannot specify both `type` and `bsonType` simultaneously./,
         );
       }
@@ -229,7 +229,7 @@ describe("zod-to-mongo-schema", () => {
         }),
       });
 
-      const r = zodToMongoSchema(schema);
+      const r = zodMongoSchema(schema);
       expect(r.properties?.foo).toMatchObject({
         title: "Foo",
         type: "string",
@@ -246,7 +246,7 @@ describe("zod-to-mongo-schema", () => {
         definitions: z.array(z.string()),
       });
 
-      const r = zodToMongoSchema(schema);
+      const r = zodMongoSchema(schema);
 
       expect(r.properties).toMatchObject({
         id: { type: "number" },
@@ -265,7 +265,7 @@ describe("zod-to-mongo-schema", () => {
         }),
       });
 
-      const r = zodToMongoSchema(schema);
+      const r = zodMongoSchema(schema);
 
       expect(r.properties?.properties).toMatchObject({
         type: "object",
@@ -297,7 +297,7 @@ describe("zod-to-mongo-schema", () => {
         ),
       });
 
-      const r = zodToMongoSchema(schema);
+      const r = zodMongoSchema(schema);
       expect(r.properties?.posts).toMatchObject({
         type: "array",
         items: {
@@ -335,7 +335,7 @@ describe("zod-to-mongo-schema", () => {
           },
         });
 
-      const r1 = zodToMongoSchema(schema1);
+      const r1 = zodMongoSchema(schema1);
 
       expect(r1).toMatchObject({
         additionalProperties: true,
@@ -359,7 +359,7 @@ describe("zod-to-mongo-schema", () => {
           }),
       });
 
-      const r2 = zodToMongoSchema(schema2);
+      const r2 = zodMongoSchema(schema2);
 
       expect(r2.properties?.foo).not.toMatchObject({ type: "string" });
 
@@ -378,7 +378,7 @@ describe("zod-to-mongo-schema", () => {
         array: z.array(z.object({ a: z.number().meta({ trash: 123 }) })),
       });
 
-      const r = zodToMongoSchema(schema);
+      const r = zodMongoSchema(schema);
 
       expect(r.properties?.exactly.allOf).toHaveLength(2);
       expect(r.properties?.exactly?.allOf?.[0]).toMatchObject({
@@ -414,7 +414,7 @@ describe("zod-to-mongo-schema", () => {
         createdAt: z.date(),
       });
 
-      const r = zodToMongoSchema(schema);
+      const r = zodMongoSchema(schema);
       expect(r.properties?.createdAt).toEqual({ bsonType: "date" });
     });
 
@@ -425,7 +425,7 @@ describe("zod-to-mongo-schema", () => {
         c: z.array(z.date()),
       });
 
-      const r = zodToMongoSchema(schema);
+      const r = zodMongoSchema(schema);
 
       // optional in draft-4 just omits from `required`, no anyOf wrapper
       expect(r.properties?.a).toMatchObject({ bsonType: "date" });
@@ -443,7 +443,7 @@ describe("zod-to-mongo-schema", () => {
         createdAt: z.date().meta({ bsonType: "timestamp" }),
       });
 
-      expect(() => zodToMongoSchema(schema)).toThrowError(
+      expect(() => zodMongoSchema(schema)).toThrowError(
         /`bsonType` can only be used with `z\.unknown\(\)`./,
       );
     });
@@ -453,7 +453,7 @@ describe("zod-to-mongo-schema", () => {
         sym: z.symbol(),
       });
 
-      expect(() => zodToMongoSchema(schema)).toThrowError(
+      expect(() => zodMongoSchema(schema)).toThrowError(
         /Unrepresentable type "symbol" cannot be converted to MongoDB JSON Schema./,
       );
     });
@@ -463,7 +463,7 @@ describe("zod-to-mongo-schema", () => {
         val: z.any().optional(),
       });
 
-      const r = zodToMongoSchema(schema);
+      const r = zodMongoSchema(schema);
       expect(r.properties?.val).toBeDefined();
     });
   });
@@ -476,7 +476,7 @@ describe("zod-to-mongo-schema", () => {
         isActive: z.boolean().meta({ bsonType: "bool" }),
       });
 
-      const r = zodToMongoSchema(schema, { strict: false });
+      const r = zodMongoSchema(schema, { strict: false });
 
       expect(r.properties?.age).toMatchObject({ bsonType: "int" });
       expect(r.properties?.name).toMatchObject({ bsonType: "string" });
@@ -489,7 +489,7 @@ describe("zod-to-mongo-schema", () => {
         updatedAt: z.date().meta({ bsonType: "date" }),
       });
 
-      const r = zodToMongoSchema(schema, { strict: false });
+      const r = zodMongoSchema(schema, { strict: false });
 
       expect(r.properties?.createdAt).toMatchObject({ bsonType: "date" });
       expect(r.properties?.updatedAt).toMatchObject({ bsonType: "date" });
@@ -500,7 +500,7 @@ describe("zod-to-mongo-schema", () => {
         data: z.instanceof(Uint8Array).meta({ bsonType: "binData" }),
       });
 
-      const r = zodToMongoSchema(schema, { strict: false });
+      const r = zodMongoSchema(schema, { strict: false });
 
       expect(r.properties?.data).toMatchObject({ bsonType: "binData" });
     });
@@ -510,7 +510,7 @@ describe("zod-to-mongo-schema", () => {
         field: z.unknown().meta({ type: "null", bsonType: "bool" }),
       });
 
-      const r = zodToMongoSchema(schema, { strict: false });
+      const r = zodMongoSchema(schema, { strict: false });
 
       // bsonType takes precedence, type is removed
       expect(r.properties?.field).toMatchObject({ bsonType: "bool" });
@@ -522,7 +522,7 @@ describe("zod-to-mongo-schema", () => {
         data: z.instanceof(Uint8Array),
       });
 
-      const r = zodToMongoSchema(schema, { strict: false });
+      const r = zodMongoSchema(schema, { strict: false });
 
       // Without bsonType meta, these become empty schemas (from unrepresentable: "any")
       expect(r.properties?.data).toEqual({});
@@ -535,7 +535,7 @@ describe("zod-to-mongo-schema", () => {
         isStudent: z.boolean(),
       });
 
-      const r = zodToMongoSchema(schema, { strict: false });
+      const r = zodMongoSchema(schema, { strict: false });
 
       expect(r.properties?.name).toMatchObject({ type: "string" });
       expect(r.properties?.age).toMatchObject({ type: "number" });

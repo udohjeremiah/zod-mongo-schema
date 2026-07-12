@@ -1,5 +1,5 @@
 {
-  "name": "zod-to-mongo-schema",
+  "name": "@udohjeremiah/zod-mongo-schema",
   "version": "1.2.0",
   "description": "Convert Zod schemas to MongoDB-compatible JSON Schemas effortlessly.",
   "keywords": [
@@ -13,33 +13,44 @@
     "validation",
     "typescript"
   ],
-  "author": "Udoh Jeremiah <udohjeremiah.com>",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/udohjeremiah/zod-to-mongo-schema"
-  },
   "license": "MIT",
+  "author": "Udoh Jeremiah <udohjeremiah.com>",
   "type": "module",
-  "sideEffects": false,
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
     }
   },
   "files": [
     "dist"
   ],
+  "sideEffects": false,
   "scripts": {
+    "build": "rm -rf dist && tsc",
     "format": "prettier --check .",
     "format:fix": "prettier --write .",
     "lint": "eslint . --ext .ts,.mts,.js,.mjs",
     "lint:fix": "eslint . --ext .ts,.mts,.js,.mjs --fix",
-    "test": "vitest",
-    "build": "rm -rf dist && tsc",
-    "prepare": "husky"
+    "prepare": "husky",
+    "test": "vitest"
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/udohjeremiah/zod-mongo-schema.git"
+  },
+  "peerDependencies": {
+    "zod": "^3.25.0 || ^4.0.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^20.1.0",
@@ -60,13 +71,5 @@
     "typescript-eslint": "^8.46.2",
     "vitest": "^4.0.5",
     "zod": "^4.1.12"
-  },
-  "peerDependencies": {
-    "zod": "^3.25.0 || ^4.0.0"
-  },
-  "config": {
-    "commitizen": {
-      "path": "cz-conventional-changelog"
-    }
   }
 }

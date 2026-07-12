@@ -7,7 +7,7 @@ import type { MongoSchema } from "./zod.js";
 /**
  * Options for converting a Zod schema to a MongoDB-compatible JSON Schema.
  */
-export interface ZodToMongoSchemaOptions {
+export interface ZodMongoSchemaOptions {
   /**
    * When `true` (default), only allows `bsonType` on `z.unknown()` schemas
    * and throws on unrepresentable types (like `z.symbol()`).
@@ -307,7 +307,7 @@ const WRAPPER_TYPES = new Set([
  *
  * ⚠️ Unlike `z.toJSONSchema`, this function supports `z.date()` — it is
  * automatically mapped to `{ bsonType: "date" }` since `date` is a native
- * BSON type. This is the one case where `zodToMongoSchema` intentionally
+ * BSON type. This is the one case where `zodMongoSchema` intentionally
  * diverges from Zod's built-in JSON Schema conversion.
  *
  * @param zodSchema The Zod schema to convert.
@@ -318,7 +318,7 @@ const WRAPPER_TYPES = new Set([
  *
  * @example
  * import z from "zod";
- * import zodToMongoSchema from "zod-to-mongo-schema";
+ * import zodMongoSchema from "@udohjeremiah/zod-mongo-schema";
  *
  * const userSchema = z.object({
  *   _id: z.unknown().meta({ bsonType: "objectId" }),
@@ -327,7 +327,7 @@ const WRAPPER_TYPES = new Set([
  *   isAdmin: z.boolean(),
  *   createdAt: z.date(), // auto-mapped to { bsonType: "date" }
  * });
- * const mongoSchema = zodToMongoSchema(userSchema);
+ * const mongoSchema = zodMongoSchema(userSchema);
  *
  * @example
  * // With strict: false, you can use bsonType on any schema
@@ -335,11 +335,11 @@ const WRAPPER_TYPES = new Set([
  *   createdAt: z.date(), // auto-mapped to { bsonType: "date" }
  *   data: z.instanceof(Uint8Array).meta({ bsonType: "binData" }),
  * });
- * const mongoSchema = zodToMongoSchema(schema, { strict: false });
+ * const mongoSchema = zodMongoSchema(schema, { strict: false });
  */
-function zodToMongoSchema(
+function zodMongoSchema(
   zodSchema: z4.$ZodType,
-  options: ZodToMongoSchemaOptions = {},
+  options: ZodMongoSchemaOptions = {},
 ): MongoSchema {
   if (!zodSchema) return {};
 
@@ -408,4 +408,4 @@ function zodToMongoSchema(
   return _sanitizeSchema(rawJsonSchema);
 }
 
-export default zodToMongoSchema;
+export default zodMongoSchema;
