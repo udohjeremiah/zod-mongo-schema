@@ -1,6 +1,6 @@
 {
   "name": "@udohjeremiah/zod-mongo-schema",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Convert Zod schemas to MongoDB-compatible JSON Schemas effortlessly.",
   "keywords": [
     "zod",
