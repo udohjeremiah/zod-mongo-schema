@@ -5,8 +5,6 @@ Convert Zod schemas to MongoDB-compatible JSON Schemas effortlessly.
 ![NPM Version](https://img.shields.io/npm/v/%40udohjeremiah%2Fzod-mongo-schema)
 ![NPM Downloads](https://img.shields.io/npm/dm/%40udohjeremiah%2Fzod-mongo-schema)
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/udohjeremiah/zod-mongo-schema/ci.yaml)
-![Codecov](https://img.shields.io/codecov/c/github/udohjeremiah/zod-mongo-schema)
-![npm bundle size](https://img.shields.io/bundlephobia/minzip/%40udohjeremiah%2Fzod-mongo-schema)
 ![GitHub License](https://img.shields.io/github/license/udohjeremiah/zod-mongo-schema)
 
 ## Overview

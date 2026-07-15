@@ -14,7 +14,11 @@
     "typescript"
   ],
   "license": "MIT",
-  "author": "Udoh Jeremiah <udohjeremiah.com>",
+  "author": {
+    "name": "Udoh Jeremiah",
+    "email": "hello@udohjeremiah.com",
+    "url": "https://udohjeremiah.com"
+  },
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
